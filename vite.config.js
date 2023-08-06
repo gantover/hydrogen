@@ -8,7 +8,6 @@ export default defineConfig({
   plugins: [
     rust({
       verbose: true,
-      serverPath: "build/"
     }),
     svelte()],
 });
