@@ -8,7 +8,7 @@ export default {
   kit: {
     adapter: adapter(),
     paths: {
-      base: process.env.NODE_ENV === 'production' ? '/my-app' : '',
+      base: process.env.NODE_ENV === 'production' ? '/hydrogen' : '',
     }
 
   }
