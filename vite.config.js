@@ -4,7 +4,7 @@ import rust from '@wasm-tool/rollup-plugin-rust'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/my-app/",
+  base: "/hydrogen/",
   plugins: [
     rust({
       verbose: true,
