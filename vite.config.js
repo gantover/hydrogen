@@ -4,10 +4,11 @@ import rust from '@wasm-tool/rollup-plugin-rust'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/my-app/",
   plugins: [
     rust({
       verbose: true,
       serverPath: "build/"
     }),
     svelte()],
-})
+});
