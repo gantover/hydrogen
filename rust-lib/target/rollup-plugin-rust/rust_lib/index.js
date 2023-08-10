@@ -408,7 +408,7 @@ export class FunctionLegendre {
     * @returns {number}
     */
     eval_sign(theta) {
-        const ret = wasm.angulaire_eval_sign(this.__wbg_ptr, theta);
+        const ret = wasm.functionlegendre_eval_sign(this.__wbg_ptr, theta);
         return ret;
     }
 }
@@ -820,7 +820,7 @@ export class Wave {
     * @returns {number}
     */
     eval_sign(theta) {
-        const ret = wasm.angulaire_eval_sign(this.__wbg_ptr, theta);
+        const ret = wasm.wave_eval_sign(this.__wbg_ptr, theta);
         return ret;
     }
 }
