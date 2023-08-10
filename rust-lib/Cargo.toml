@@ -8,4 +8,8 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+hsl = "0.1.1"
+itertools-num = "0.1.3"
+num = "0.4.1"
+transvoxel = "1.0.0"
 wasm-bindgen = "0.2.87"
