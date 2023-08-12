@@ -1,6 +1,9 @@
+* {
+  box-sizing: border-box;
+}
+
 h1 {
   margin: 5px;
-  /* color: #ff3e00; */
   text-align: center;
   /* font-weight: 100; */
 }
@@ -72,5 +75,13 @@ label {
 .remove_iso_value:hover {
   color: red;
   transition: ease-in-out 0.1s;
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  color: #fab387;
 }
 

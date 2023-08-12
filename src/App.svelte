@@ -1,14 +1,18 @@
 <script>
   import { onMount } from "svelte";
-  import { createScene } from "./graphics";
-  import { resize } from "./graphics";
-  import { initDefaultLayer } from "./graphics";
-  import { addLayer } from "./graphics";
-  import { removeLayer } from "./graphics";
-  import { changeLayerVisibility } from "./graphics";
-  import { createPlot } from "./plots";
-  import Menu from "./Menu.svelte";
-  import Console from "./Console.svelte";
+  import { createScene } from "./lib/graphics";
+  import { resize } from "./lib/graphics";
+  import { initDefaultLayer } from "./lib/graphics";
+  import { addLayer } from "./lib/graphics";
+  import { removeLayer } from "./lib/graphics";
+  import { changeLayerVisibility } from "./lib/graphics";
+  import { createPlot } from "./lib/plots";
+  import Console from "./menu/Console.svelte";
+  import GuiSelection from "./menu/GuiSelection.svelte";
+  import Docs from "./menu/Docs.svelte";
+  import QuantumNumbers from "./menu/QuantumNumbers.svelte";
+  import IsoValues from "./menu/IsoValues.svelte";
+  import DisplayBox from "./display/DisplayBox.svelte";
 
   export let bindings;
 
@@ -34,7 +38,8 @@
     createScene(draw_box, bindings);
     window.addEventListener("resize", () => handleResize(50));
   });
-  export const handleResize= (time) => {
+
+  function handleResize(time) {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       switch (gui_option) {
@@ -46,7 +51,7 @@
           break;
       }
     }, time);
-  };
+  }
 
   function handleQuantumNumbers(e) {
     done_3d = false;
@@ -63,7 +68,7 @@
         e.detail.precision,
         default_iso_value
       );
-      default_iso_values = [{visible: true, val: default_iso_value}];
+      default_iso_values = [{ visible: true, val: default_iso_value }];
       switch (gui_option) {
         case "3dwave":
           initDefaultLayer(
@@ -82,7 +87,7 @@
     }
   }
 
-  function handleGuiChange() {
+  function handleGuiSelectionChange() {
     switch (gui_option) {
       case "3dwave":
         if (!done_3d) {
@@ -118,11 +123,15 @@
 <div id="flex-container">
   <div id="parameters">
     <Console bind:error />
-    <Menu
+
+    <QuantumNumbers
       on:send_quantum_numbers={(e) => {
-        handleQuantumNumbers(e);
-        handleResize(50);
+        handleQuantumNumbers(e), handleResize(50);
       }}
+    />
+
+    <IsoValues
+      bind:iso_values={default_iso_values}
       on:send_iso_value={(e) => {
         addLayer(e.detail);
         handleResize(50);
@@ -133,40 +142,23 @@
       }}
       on:send_visibility_layer={(e) =>
         changeLayerVisibility(e.detail.index, e.detail.state)}
-      bind:iso_values={default_iso_values}
     />
-    <h2>Gui Selection</h2>
-    <select
-      name="gui"
-      id="gui_select"
-      bind:value={gui_option}
-      on:change={() => handleGuiChange()}
-    >
-      <option value="3dwave">Orbitales 3D</option>
-      <option value="2dwave">Fonctions</option>
-    </select>
+
+    <GuiSelection
+      bind:gui_option
+      on:change={() => handleGuiSelectionChange()}
+    />
+
+    <Docs />
   </div>
 
-  <div id="draw_box" bind:this={draw_container} class={gui_option !== "3dwave" ? "none" : ""}>
-    <canvas bind:this={draw_box} />
-  </div>
-
-  <div
-    id="plots_box"
-    bind:this={plots_container}
-    class={gui_option !== "2dwave" ? "none" : ""}
-  >
-    <div id="plot_radial" bind:this={plot_radial} />
-    <div id="plot_angular" bind:this={plot_angular} />
-  </div>
+  <DisplayBox
+    bind:draw_container
+    bind:draw_box
+    bind:plots_container
+    bind:plot_radial
+    bind:plot_angular
+    bind:gui_option
+  />
 
 </div>
-
-<style>
-  .none {
-    display: none;
-  }
-  * {
-    box-sizing: border-box;
-  }
-</style>
