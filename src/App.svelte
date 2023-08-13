@@ -118,7 +118,10 @@
   }
 </script>
 
+<div class="title">
+<h1 class="rainbow">Ψ</h1>
 <h1>Hydrogen Wave Function</h1>
+</div>
 
 <div id="flex-container">
   <div id="parameters">

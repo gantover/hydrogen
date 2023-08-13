@@ -1,6 +1,6 @@
 use hsl::HSL;
 use itertools_num::linspace;
-use num::{self, clamp, Float};
+use num::{self, Float};
 use std::{
     collections::HashMap,
     f64::consts::{E, PI},
@@ -243,6 +243,8 @@ impl PolyLaguerreGen {
 #[wasm_bindgen]
 #[derive(Clone)]
 pub struct Radial {
+    poly: PolyLaguerreGen,
+    p: f64,
     eval: Rc<dyn Fn(f64) -> f64>,
     wave_type: String,
 }
@@ -259,6 +261,7 @@ impl Radial {
         let eval: Rc<dyn Fn(f64) -> f64> = match wave_type {
             "modulus" => {
                 let mult = mult2.clone();
+                let poly = poly.clone();
                 Rc::new(move |r: f64| {
                     let u = p * r;
                     (mult * u.powi(2 * l as i32) * poly.eval(u).powi(2) * E.powf(-u)).sqrt()
@@ -266,6 +269,7 @@ impl Radial {
             }
             "density" => {
                 let mult = mult2.clone();
+                let poly = poly.clone();
                 Rc::new(move |r: f64| {
                     let u = p * r;
                     r.powi(2) * mult * u.powi(2 * l as i32) * poly.eval(u).powi(2) * E.powf(-u)
@@ -276,6 +280,8 @@ impl Radial {
             }
         };
         Radial {
+            poly,
+            p,
             eval,
             wave_type: wave_type.to_string(),
         }
@@ -321,6 +327,9 @@ impl Radial {
             dist: d,
             legend,
         }
+    }
+    pub fn eval_sign(&self, r: f64) -> f64 {
+        sign(self.poly.eval(self.p * r))
     }
 }
 
@@ -380,8 +389,8 @@ impl Wave {
         return (self.radial.eval.to_owned()(r as f64)
             * self.angulaire.eval.to_owned()(theta as f64)) as f32;
     }
-    pub fn eval_sign(&self, theta: f64) -> f64 {
-        self.angulaire.eval_sign(theta)
+    pub fn eval_sign(&self, theta: f64, r: f64) -> f64 {
+        self.angulaire.eval_sign(theta) * self.radial.eval_sign(r)
     }
 }
 
@@ -443,14 +452,17 @@ impl MarchingCubes {
         let wave = self.wave.clone();
         let cut: Box<dyn Fn(f64) -> f32>;
         let luminosity =
-            1f32 / (E.powf(-((threshold - self.avr) * 100f32) as f64) as f32 + 1f32) as f32;
+            (1f32 / (E.powf(-((threshold - self.avr) * 100f32) as f64) as f32 + 1f32) as f32) * 0.8;
         // let luminosity = clamp((threshold / self.avr) * 0.3, 0.0, 1.0);
         match material_type {
-            "see_through" => {
-                cut = Box::new(|phi: f64| if phi > 0.0 && phi < 90.0 { 0.1 } else { 0.8 });
-            }
             "full" => {
                 cut = Box::new(|_: f64| 1.0);
+            }
+            "see_through" => {
+                cut = Box::new(|_: f64| 0.8);
+            }
+            "cut_see_through" => {
+                cut = Box::new(|phi: f64| if phi > 0.0 && phi < 90.0 { 0.1 } else { 0.8 });
             }
             _ => {
                 panic!("non-existing material type")
@@ -467,7 +479,7 @@ impl MarchingCubes {
             let mut phi: f64 = (signe * (z / (z.powi(2) + x.powi(2)).sqrt()).acos()) * RAD2DEG;
             let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
             let theta: f64 = (y / r).acos();
-            let mod_sign = wave.eval_sign(theta);
+            let mod_sign = wave.eval_sign(theta, r);
             let opacity = cut(phi);
             phi = phi * wave.angulaire.poly.m as f64;
             if mod_sign as i64 == -1 {

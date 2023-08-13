@@ -727,6 +727,14 @@ export class Radial {
         const ret = wasm.radial_eval_range_values(this.__wbg_ptr);
         return EvalRes.__wrap(ret);
     }
+    /**
+    * @param {number} r
+    * @returns {number}
+    */
+    eval_sign(r) {
+        const ret = wasm.radial_eval_sign(this.__wbg_ptr, r);
+        return ret;
+    }
 }
 /**
 */
@@ -817,10 +825,11 @@ export class Wave {
     }
     /**
     * @param {number} theta
+    * @param {number} r
     * @returns {number}
     */
-    eval_sign(theta) {
-        const ret = wasm.wave_eval_sign(this.__wbg_ptr, theta);
+    eval_sign(theta, r) {
+        const ret = wasm.wave_eval_sign(this.__wbg_ptr, theta, r);
         return ret;
     }
 }

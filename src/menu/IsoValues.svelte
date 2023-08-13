@@ -40,6 +40,7 @@
 >
   <option value="full">full</option>
   <option value="see_through">see-through</option>
+  <option value="cut_see_through">cut-see-through</option>
 </select>
 <label>
   <input type="checkbox" bind:checked={wireframe_toggle} />

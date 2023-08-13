@@ -39,7 +39,7 @@ export const initDefaultLayer = (mc, isovalue, camera_dist) => {
   scene.clear();
   marching_cubes = mc;
   let material = getMaterial();
-  let geometry = getGeometry(isovalue, "see_through");
+  let geometry = getGeometry(isovalue, "cut_see_through");
   let mesh = new THREE.Mesh(geometry, material)
   getLighting(mesh);
   layers = [mesh];
@@ -55,13 +55,14 @@ export const addLayer = (input) => {
       break;
     case 'see_through': material.transparent = true;
       break;
+    case 'cut_see_through': material.transparent = true;
+      break;
   }
   if (input.wireframe === true) {
     material.wireframe = true;
   }
   let geometry = getGeometry(input.iso_value, input.material_type);
   let mesh = new THREE.Mesh(geometry, material);
-  // mesh.frustumCulled = false;
   layers.push(mesh);
   console.log(layers)
   scene.add(mesh);

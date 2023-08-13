@@ -2,10 +2,29 @@
   box-sizing: border-box;
 }
 
+.title {
+  text-align: center;
+}
+
+.title h1 {
+  display: inline;
+}
+
+h1.rainbow:hover {
+  cursor: default;
+  text-shadow: 0 0px 20px rgba(255,255,255,0.4);
+  color: white;
+  background: conic-gradient(#fd004c, #fe9000, #fff020, #3edf4b, #3363ff, #b102b7, #fd004c);
+  -webkit-background-clip: text;
+  -background-clip: text;
+  -clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.5s ease-in-out;
+}
+
 h1 {
   margin: 5px;
   text-align: center;
-  /* font-weight: 100; */
 }
 
 h2 {
@@ -26,6 +45,7 @@ body {
   height: 100%;
   margin: 0 auto;
 }
+
 #parameters {
   background: #1e1e2e;
   border: 1px solid black;
@@ -37,16 +57,8 @@ body {
   max-height: 600px;
   flex-shrink: 4;
 }
-#draw_box {
-  border: 1px solid black;
-  border-radius: 5px;
-  width: 80%;
-  overflow: visible;
-  flex-shrink: 1;
-  background: #1e1e2e;
-}
 
-#plots_box {
+#draw_box {
   border: 1px solid black;
   border-radius: 5px;
   width: 80%;
@@ -61,6 +73,16 @@ canvas {
   height: 100%;
   margin: 0;
 }
+
+#plots_box {
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 80%;
+  overflow: visible;
+  flex-shrink: 1;
+  background: #1e1e2e;
+}
+
 
 label {
   font-size: 0.8em;
