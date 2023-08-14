@@ -3,7 +3,8 @@
   const dispatcher = createEventDispatcher();
   let material_type;
   export let iso_values = [];
-  let new_iso_value;
+  export let new_iso_value;
+  let step = 1 / 100.;
   let wireframe_toggle = false;
   function addIsoValue() {
     iso_values = [...iso_values, { visible: true, val: new_iso_value }];
@@ -32,13 +33,15 @@
 </script>
 
 <h2>Isovalues</h2>
-<input type="number" bind:value={new_iso_value} />
+<!-- <input type="number" bind:value={new_iso_value} step={() => {return (new_iso_value / 1000).toString()}} /> -->
+<input type="number" bind:value={new_iso_value} step={new_iso_value/10}/>
 <select
   name="material_type"
   id="select_material_type"
   bind:value={material_type}
 >
   <option value="full">full</option>
+  <option value="cut_full">cut-full</option>
   <option value="see_through">see-through</option>
   <option value="cut_see_through">cut-see-through</option>
 </select>

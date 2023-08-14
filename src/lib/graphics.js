@@ -53,6 +53,8 @@ export const addLayer = (input) => {
   switch (input.material_type) {
     case 'full': material.transparent = false;
       break;
+    case 'cut_full': material.transparent = true;
+      break;
     case 'see_through': material.transparent = true;
       break;
     case 'cut_see_through': material.transparent = true;

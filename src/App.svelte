@@ -25,7 +25,7 @@
   let radial_res;
   let angular_res;
   let default_iso_values;
-  let default_iso_value;
+  let default_iso_value = 0;
   let marching_cubes;
   let error = "";
   let gui_option = "3dwave";
@@ -119,8 +119,8 @@
 </script>
 
 <div class="title">
-<h1 class="rainbow">Ψ</h1>
-<h1>Hydrogen Wave Function</h1>
+  <h1 class="rainbow">Ψ</h1>
+  <h1>Hydrogen Wave Function</h1>
 </div>
 
 <div id="flex-container">
@@ -134,6 +134,7 @@
     />
 
     <IsoValues
+      bind:new_iso_value={default_iso_value}
       bind:iso_values={default_iso_values}
       on:send_iso_value={(e) => {
         addLayer(e.detail);
@@ -163,5 +164,4 @@
     bind:plot_angular
     bind:gui_option
   />
-
 </div>

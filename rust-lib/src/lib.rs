@@ -1,6 +1,6 @@
 use hsl::HSL;
 use itertools_num::linspace;
-use num::{self, Float};
+use num::{self, Float, signum};
 use std::{
     collections::HashMap,
     f64::consts::{E, PI},
@@ -29,21 +29,16 @@ fn facto(n: u64) -> u64 {
     }
     if n == 1 {
         return 1;
+    } else if n > 10 {
+        stirling(n).ceil() as u64
     } else {
         n * facto(n - 1)
     }
 }
 
+// aproximation de factorielle
 fn stirling(n: u64) -> f64 {
-    2f64
-}
-
-// signe d'un nombre
-fn sign<T>(x: T) -> T
-where
-    T: num::Signed + Copy,
-{
-    x / x.abs()
+    (2f64*PI*n as f64).sqrt() * (n as f64 / E).powi(n as i32) * (1f64 + 1f64/(12f64*n as f64))
 }
 
 // coefficients binomiaux
@@ -119,7 +114,7 @@ impl PolyLegendre {
         self.eval_poly(u) * self.mult
     }
     pub fn eval_sign(&self, u: f64) -> f64 {
-        sign(self.eval_poly(u))
+        signum(self.eval_poly(u))
     }
 }
 
@@ -329,7 +324,7 @@ impl Radial {
         }
     }
     pub fn eval_sign(&self, r: f64) -> f64 {
-        sign(self.poly.eval(self.p * r))
+        signum(self.poly.eval(self.p * r))
     }
 }
 
@@ -464,6 +459,9 @@ impl MarchingCubes {
             "cut_see_through" => {
                 cut = Box::new(|phi: f64| if phi > 0.0 && phi < 90.0 { 0.1 } else { 0.8 });
             }
+            "cut_full" => {
+                cut = Box::new(|phi: f64| if phi > 0.0 && phi < 90.0 { 0.1 } else { 1.0 });
+            }
             _ => {
                 panic!("non-existing material type")
             }
@@ -472,7 +470,7 @@ impl MarchingCubes {
             let x = pos.x as f64;
             let y = pos.y as f64;
             let z = pos.z as f64;
-            let mut signe = sign(x);
+            let mut signe = signum(x);
             if signe.is_nan() {
                 signe = 1f64;
             }
