@@ -1,9 +1,11 @@
 use hsl::HSL;
+use itertools::{sorted, Itertools};
 use itertools_num::linspace;
-use num::{self, Float, signum};
+use num::{self, signum, Float};
 use std::{
     collections::HashMap,
     f64::consts::{E, PI},
+    iter::Rev,
     process,
     rc::Rc,
 };
@@ -23,22 +25,31 @@ pub fn add(left: usize, right: usize) -> usize {
 }
 
 // factorielle recursive
-fn facto(n: u64) -> u64 {
+#[wasm_bindgen]
+pub fn facto(n: u64) -> u64 {
     if n == 0 {
         return 1;
     }
     if n == 1 {
         return 1;
-    } else if n > 10 {
-        stirling(n).ceil() as u64
+    // } else if n > 10 {
+    //     stirling(n)
     } else {
         n * facto(n - 1)
     }
 }
 
 // aproximation de factorielle
-fn stirling(n: u64) -> f64 {
-    (2f64*PI*n as f64).sqrt() * (n as f64 / E).powi(n as i32) * (1f64 + 1f64/(12f64*n as f64))
+#[wasm_bindgen]
+pub fn stirling(n: u64) -> u64 {
+    let val = (2f64 * PI * n as f64).sqrt()
+        * (n as f64 / E).powi(n as i32)
+        * (1f64 + 1f64 / (12f64 * n as f64));
+    if val.is_finite() {
+        return val.ceil() as u64;
+    } else {
+        panic!("val is infinite")
+    }
 }
 
 // coefficients binomiaux
@@ -103,6 +114,13 @@ impl PolyLegendre {
             self.apply_derivative();
         }
     }
+    pub fn eval_poly_old(&self, u: f64) -> f64 {
+        let mut result: f64 = 0.;
+        for (power, coef) in &self.coefs {
+            result += *coef as f64 * u.powi(*power as i32);
+        }
+        result
+    }
     pub fn eval_poly(&self, u: f64) -> f64 {
         let mut result: f64 = 0.;
         for (power, coef) in &self.coefs {
@@ -116,13 +134,38 @@ impl PolyLegendre {
     pub fn eval_sign(&self, u: f64) -> f64 {
         signum(self.eval_poly(u))
     }
+    pub fn get_latex(&self) -> String {
+        let argument = "u".to_string();
+        let mut items: Vec<String> = Vec::new();
+        items.push(self.mult.to_string());
+        items.push("(".to_string());
+        for (power, coef) in &self.coefs {
+            let item: String;
+            let signe = if *coef > 0f64 {
+                "+".to_string()
+            } else {
+                "".to_string()
+            };
+            match *power {
+                0 => item = format!("{signe}{coef}"),
+                _ => item = format!("{signe}{coef}{argument}^{power}"),
+            }
+            items.push(item)
+        }
+        items.push(")".to_string());
+        items.into_iter().collect::<String>()
+    }
+}
+
+fn order_hashmap_keys(coefs: &HashMap<i64, f64>) -> Rev<std::vec::IntoIter<&i64>> {
+    coefs.keys().sorted().rev()
 }
 
 #[derive(Clone)]
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 pub struct FunctionLegendre {
     m: i64,
-    poly: PolyLegendre,
+    pub poly: PolyLegendre,
 }
 
 #[wasm_bindgen]
@@ -142,9 +185,9 @@ impl FunctionLegendre {
 }
 
 #[derive(Clone)]
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 pub struct Angulaire {
-    poly: FunctionLegendre,
+    pub poly: FunctionLegendre,
     eval: Rc<dyn Fn(f64) -> f64>,
     wave_type: String,
 }
@@ -235,10 +278,10 @@ impl PolyLaguerreGen {
     }
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Clone)]
 pub struct Radial {
-    poly: PolyLaguerreGen,
+    pub poly: PolyLaguerreGen,
     p: f64,
     eval: Rc<dyn Fn(f64) -> f64>,
     wave_type: String,
@@ -290,7 +333,7 @@ impl Radial {
         let mut counter = 0;
         loop {
             counter += 1;
-            let mut current_range: Vec<f64> = linspace(d, d + 5f64, PRECISION).collect();
+            let mut current_range: Vec<f64> = linspace(d, d + 10f64, PRECISION).collect();
             let mut current_eval: Vec<f64> = current_range
                 .iter()
                 .map(|item| self.eval.to_owned()(*item))
@@ -306,7 +349,7 @@ impl Radial {
                 total_avr += current_avr;
                 total_range.append(&mut current_range);
                 total_eval.append(&mut current_eval);
-                d += 5f64;
+                d += 10f64;
             }
         }
         let legend = match &*self.wave_type {

@@ -58,7 +58,10 @@
     let qn = e.detail.qn;
     let wave;
     try {
+      console.log(bindings.stirling(BigInt(14)));
+      console.log(bindings.facto(BigInt(14)));
       wave = new bindings.Wave(qn.n, qn.l, qn.m, 1, e.detail.wave_type);
+      console.log(wave.angulaire.poly.poly.get_latex());
       radial_res = wave.radial.eval_range_values();
       angular_res = wave.angulaire.eval_range_values();
       default_iso_value = radial_res.avr * angular_res.avr;
@@ -83,7 +86,12 @@
       }
       error = "no error occured";
     } catch (ex) {
-      error = ex;
+      console.log(ex.toString())
+      error = ex.toString();
+      if (error.indexOf("wasm") != -1) {
+        error = "Those numbers may be too large"
+      }
+    } finally {
     }
   }
 
