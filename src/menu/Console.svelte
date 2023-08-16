@@ -2,7 +2,6 @@
   export let error = "";
 </script>
 
-
 <div id="console">
 {#each error.split(";") as err }
 <div>
@@ -18,6 +17,7 @@
     margin: 5px;
     padding: 5px;
     border-radius: 5px;
+    overflow: auto;
   }
 </style>
 

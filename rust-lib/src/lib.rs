@@ -1,11 +1,9 @@
 use hsl::HSL;
-use itertools::{sorted, Itertools};
 use itertools_num::linspace;
 use num::{self, signum, Float};
 use std::{
     collections::HashMap,
     f64::consts::{E, PI},
-    iter::Rev,
     process,
     rc::Rc,
 };
@@ -16,32 +14,22 @@ use wasm_bindgen::prelude::*;
 const A0: f64 = 1.0;
 const RYD: f64 = 13.6;
 const PRECISION: usize = 50;
-const PI_32: f32 = std::f32::consts::PI;
 const RAD2DEG: f64 = 180f64 / PI;
 
-#[wasm_bindgen]
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
-
 // factorielle recursive
-#[wasm_bindgen]
-pub fn facto(n: u64) -> u64 {
+fn facto(n: u64) -> u64 {
     if n == 0 {
         return 1;
     }
     if n == 1 {
         return 1;
-    // } else if n > 10 {
-    //     stirling(n)
     } else {
         n * facto(n - 1)
     }
 }
 
 // aproximation de factorielle
-#[wasm_bindgen]
-pub fn stirling(n: u64) -> u64 {
+fn stirling(n: u64) -> u64 {
     let val = (2f64 * PI * n as f64).sqrt()
         * (n as f64 / E).powi(n as i32)
         * (1f64 + 1f64 / (12f64 * n as f64));
@@ -134,31 +122,6 @@ impl PolyLegendre {
     pub fn eval_sign(&self, u: f64) -> f64 {
         signum(self.eval_poly(u))
     }
-    pub fn get_latex(&self) -> String {
-        let argument = "u".to_string();
-        let mut items: Vec<String> = Vec::new();
-        items.push(self.mult.to_string());
-        items.push("(".to_string());
-        for (power, coef) in &self.coefs {
-            let item: String;
-            let signe = if *coef > 0f64 {
-                "+".to_string()
-            } else {
-                "".to_string()
-            };
-            match *power {
-                0 => item = format!("{signe}{coef}"),
-                _ => item = format!("{signe}{coef}{argument}^{power}"),
-            }
-            items.push(item)
-        }
-        items.push(")".to_string());
-        items.into_iter().collect::<String>()
-    }
-}
-
-fn order_hashmap_keys(coefs: &HashMap<i64, f64>) -> Rev<std::vec::IntoIter<&i64>> {
-    coefs.keys().sorted().rev()
 }
 
 #[derive(Clone)]
@@ -491,7 +454,6 @@ impl MarchingCubes {
         let cut: Box<dyn Fn(f64) -> f32>;
         let luminosity =
             (1f32 / (E.powf(-((threshold - self.avr) * 100f32) as f64) as f32 + 1f32) as f32) * 0.8;
-        // let luminosity = clamp((threshold / self.avr) * 0.3, 0.0, 1.0);
         match material_type {
             "full" => {
                 cut = Box::new(|_: f64| 1.0);
@@ -544,13 +506,13 @@ impl MarchingCubes {
 }
 
 fn bound360(phi: f64) -> f64 {
-    return if phi >= 360.0 {
-        phi - 360.0
-    } else if phi < 0.0 {
-        phi + 360.0
+    let sign = signum(phi);
+    let a = (phi / 360.0).abs().floor() as u64;
+    if a > 0 {
+        return phi - sign * (a * 360) as f64;
     } else {
-        phi
-    };
+        return phi
+    }
 }
 
 struct Pos<T>

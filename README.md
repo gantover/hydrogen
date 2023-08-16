@@ -31,6 +31,10 @@ To add new iso values:
 2. Then, choose the type of material (full, cut-see-through), wireframe is an option that shows the vertexes. 
 3. When done, press **add**.
 
+Once its added : 
+- the visibility can be toggled on and off by the checkbox on the left side
+- the iso surface can be removed with **x**
+
 ### Output : Gui Selection
 
 You can either show: 

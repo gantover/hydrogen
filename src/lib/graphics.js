@@ -38,8 +38,9 @@ export const createScene = (el, wasm) => {
 export const initDefaultLayer = (mc, isovalue, camera_dist) => {
   scene.clear();
   marching_cubes = mc;
-  let material = getMaterial();
-  let geometry = getGeometry(isovalue, "cut_see_through");
+  let init_material_type = "cut_see_through";
+  let material = getMaterial(init_material_type);
+  let geometry = getGeometry(isovalue, init_material_type);
   let mesh = new THREE.Mesh(geometry, material)
   getLighting(mesh);
   layers = [mesh];
@@ -49,17 +50,7 @@ export const initDefaultLayer = (mc, isovalue, camera_dist) => {
 }
 
 export const addLayer = (input) => {
-  let material = getMaterial();
-  switch (input.material_type) {
-    case 'full': material.transparent = false;
-      break;
-    case 'cut_full': material.transparent = true;
-      break;
-    case 'see_through': material.transparent = true;
-      break;
-    case 'cut_see_through': material.transparent = true;
-      break;
-  }
+  let material = getMaterial(input.material_type);
   if (input.wireframe === true) {
     material.wireframe = true;
   }
@@ -79,7 +70,7 @@ export const changeLayerVisibility = (index, state) => {
   layers[index].visible = state;
 }
 
-const getMaterial = () => {
+const getMaterial = (material_type) => {
   const material = new THREE.MeshPhongMaterial({
     onBeforeCompile: (shader) => {
       material.vertexColors = true
@@ -89,10 +80,18 @@ const getMaterial = () => {
           diffuseColor = vColor;`)
     },
   })
-  material.transparent = true;
   material.vertexColors = true;
   material.side = THREE.DoubleSide;
-
+  switch (material_type) {
+    case 'full': material.transparent = false;
+      break;
+    case 'cut_full': material.transparent = true;
+      break;
+    case 'see_through': material.transparent = true;
+      break;
+    case 'cut_see_through': material.transparent = true;
+      break;
+  }
   return material;
 }
 
@@ -102,6 +101,7 @@ const getGeometry = (iso_value, material_type) => {
   const indices = Array.from(marching_cubes_res.indices);
   const normals = marching_cubes_res.normals;
   const colors = marching_cubes_res.colors;
+  console.log(colors);
   const geometry = new THREE.BufferGeometry();
   geometry.setIndex(indices);
   geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
