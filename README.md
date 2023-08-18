@@ -2,8 +2,10 @@
 
 <div style="border: 1px solid gray; border-radius: 5px; padding: 5px; margin: 5px; color: gray">example : n:4, l:2, m:-1 && n:11 l:5 m:1 with added material:full iso value layer</div>
 
+<div style="display: flex; justify-content: center;">
 <img src='docs_attachements/421layer2.png' style="width: 45%; margin-left: auto; margin-right: auto; border-radius: 10px; mix-blend-mode: screen;" alt="example : n:4, l:2, m:-1"/>
 <img src='docs_attachements/1153.png' style="width: 45%; margin-left: auto; margin-right: auto; border-radius: 10px; mix-blend-mode: screen;" alt="example : n:4, l:2, m:-1"/>
+</div>
 
 > Credits : this visualization of hydrogen is largely inspired by [Dr. Bernd Thaller](https://vqm.uni-graz.at/pages/thaller.html)'s [*quantum graphics gallery*](https://vqm.uni-graz.at/pages/qm_gallery/index.html)
 
