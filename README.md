@@ -13,7 +13,7 @@
 
 # User-side docs
 
-### First Input (Quantum Parameters)
+### First Input : Quantum Parameters
 
 - 3 quantum numbers describe the electron state (omitting the spin):
 	- N : main
