@@ -364,6 +364,9 @@ impl Wave {
     // the input comes from javascript which does not use 64bit integers (except for BigInt)
     pub fn new(n: i32, l: i32, m: i32, z: i32, wave_type: &str) -> Result<Wave, String> {
         let mut errors = Vec::new();
+        if (n + l >= 20) {
+            errors.push("Those numbers may be too large, try to avoid N + L >= 20".to_string());
+        }
         if n < 1 {
             errors.push("wrong N value".to_string());
         }

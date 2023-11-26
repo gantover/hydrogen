@@ -58,9 +58,6 @@
     let qn = e.detail.qn;
     let wave;
     try {
-      if (qn.n + qn.l >= 20) {
-        throw new Error("Those numbers may be too large, try to avoid N + L >= 20");
-      }
       wave = new bindings.Wave(qn.n, qn.l, qn.m, 1, e.detail.wave_type);
       radial_res = wave.radial.eval_range_values();
       angular_res = wave.angulaire.eval_range_values();
