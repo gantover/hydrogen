@@ -7,7 +7,7 @@ export const createPlot = (el, res, size) => {
     name: res.legend,
   }
   const layout = {
-    width: size.w, height: size.h, 
+    width: size.w-4, height: size.h-4, 
     margin: { l: 40, r: 20, b: 20, t: 20 },
     showlegend: true,
     legend: {

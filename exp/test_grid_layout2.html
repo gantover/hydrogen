@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100%;
+    }
+
+    .title {
+      grid-row: 1;
+      grid-column: 1 / span 3;
+      text-align: center;
+      padding: 10px;
+      background-color: #f0f0f0;
+    }
+
+    .column {
+      display: grid;
+      grid-template-columns: 20% 30% 30%; /* Initial values for three columns */
+      grid-template-rows: 1fr;
+      grid-row: 2;
+      height: 100%;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .column1, .column2, .column3 {
+      height: 100%;
+      box-sizing: border-box;
+      overflow: scroll;
+    }
+
+    .toggle-button {
+      top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-container">
+    <div class="title">Title</div>
+    <div class="column">
+      <div class="column1">
+        <div class="toggle-button" onclick="toggleColumn(1)">Toggle Column 1</div>
+        <div class="toggle-button" onclick="toggleColumn(2)">Toggle Column 2</div>
+        <div class="toggle-button" onclick="toggleColumn(3)">Toggle Column 3</div>
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        <!-- Content for column 1 -->
+      </div>
+      <div class="column2">
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        <!-- Content for column 2 -->
+      </div>
+      <div class="column3">
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        gasldhfaosghsoighdsaofhavuipbduiofhasiunviuabhuihfouschvg
+        <!-- Content for column 3 -->
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    function toggleColumn(columnNumber) {
+      const column = document.querySelector(`.column${columnNumber}`);
+      const grid = document.querySelector('.column');
+      const visibleColumns = document.querySelectorAll('.column:not([style*="none"])').length;
+
+      if (column.style.display === 'none') {
+        column.style.display = 'grid';
+      } else {
+        column.style.display = 'none';
+      }
+
+      const remainingWidth = 100 - parseInt(column.style.gridTemplateColumns.split(' ')[0]); // Calculate remaining width
+
+      // Distribute remaining width among visible columns
+      grid.style.gridTemplateColumns = `${20 * visibleColumns}% ${remainingWidth / (visibleColumns - 1)}%`.repeat(visibleColumns);
+    }
+  </script>
+</body>
+</html>
+

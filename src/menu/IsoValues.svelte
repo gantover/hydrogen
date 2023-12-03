@@ -3,11 +3,21 @@
   const dispatcher = createEventDispatcher();
   let material_type;
   export let iso_values = [];
+  export let materials = [];
   export let new_iso_value;
-  let step = 1 / 100.;
+  $: {
+    getExpFormat()
+  }
+  function getExpFormat() {
+    new_iso_value = parseFloat(new_iso_value).toExponential(2);
+  }
+  export function updateNewIsoValue() {
+    getExpFormat()
+  }
   let wireframe_toggle = false;
   function addIsoValue() {
-    iso_values = [...iso_values, { visible: true, val: new_iso_value }];
+    materials = [...materials, material_type];
+    iso_values = [...iso_values, { visible: true, val: parseFloat(new_iso_value) }];
     dispatcher("send_iso_value", {
       iso_value: new_iso_value,
       material_type: material_type,
@@ -17,6 +27,8 @@
   function removeIsoValue(index) {
     iso_values.splice(index, 1);
     iso_values = iso_values;
+    materials.splice(index, 1);
+    materials = materials;
     dispatcher("send_rm_iso_value", { index: index });
   }
   function handleVisibilityChange(e, index) {
@@ -29,12 +41,15 @@
       index: index,
       state: e.target.checked,
     });
-  }
+  } 
 </script>
 
 <h2>Isovalues</h2>
-<!-- <input type="number" bind:value={new_iso_value} step={() => {return (new_iso_value / 1000).toString()}} /> -->
-<input type="number" bind:value={new_iso_value} step={new_iso_value/10}/>
+<input type="number" bind:value={new_iso_value} step={new_iso_value/10} 
+  on:blur={() => getExpFormat()} 
+  on:change={()=> getExpFormat()}
+  on:mouseover={()=> getExpFormat()}
+  on:focus={()=> getExpFormat()}/>
 <select
   name="material_type"
   id="select_material_type"
@@ -63,7 +78,7 @@
       </th>
       <th>
         <p class="iso_value">
-          {val.val}
+          {val.val.toExponential(2)}
         </p>
       </th>
       <th>

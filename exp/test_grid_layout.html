@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100%;
+    }
+
+    .title {
+      grid-row: 1;
+      grid-column: 1 / span 3;
+      text-align: center;
+      padding: 10px;
+      background-color: #f0f0f0;
+    }
+
+    .column {
+      display: grid;
+      grid-template-columns: 20% repeat(2, 1fr); /* First column takes 20%, remaining space is divided equally */
+      grid-template-rows: 1fr;
+      grid-row: 2;
+      height: 100%;
+    }
+
+    .column1 {
+      overflow: scroll;
+    }
+
+    .column2, .column3 {
+      overflow: hidden;
+    }
+
+    .column1, .column2, .column3 {
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    .toggle-button {
+      top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-container">
+    <div class="title">Title</div>
+    <div class="column">
+      <div class="column1">
+        <div class="toggle-button" onclick="toggleColumn(1)">Toggle Column 1</div>
+        <div class="toggle-button" onclick="toggleColumn(2)">Toggle Column 2</div>
+        <div class="toggle-button" onclick="toggleColumn(3)">Toggle Column 3</div>
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        <!-- Content for column 1 -->
+      </div>
+      <div class="column2">
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        <!-- Content for column 2 -->
+      </div>
+      <div class="column3">
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        afsodhfioaewhopasjdfoihgoapijvldhfoieajcvoiahsfodilfghjobdsfnjxclkhgovwupe
+        <!-- Content for column 3 -->
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    function toggleColumn(columnNumber) {
+      const column = document.querySelector(`.column${columnNumber}`);
+      const grid = document.querySelector('.column');
+      
+      if (column.style.display === 'none') {
+        column.style.display = 'grid';
+        grid.style.gridTemplateColumns = `20% repeat(${document.querySelectorAll('.column:not([style*="none"])').length - 1}, 1fr)`;
+      } else {
+        column.style.display = 'none';
+        grid.style.gridTemplateColumns = `20% repeat(${document.querySelectorAll('.column:not([style*="none"])').length - 1}, 1fr)`;
+      }
+    }
+  </script>
+</body>
+</html>
+

@@ -5,7 +5,7 @@
 <div id="console">
 {#each error.split(";") as err }
 <div>
-|> {err}
+|Ψ> {err}
 </div>
 {/each}
 </div>

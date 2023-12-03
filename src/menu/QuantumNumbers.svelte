@@ -2,8 +2,8 @@
   import { createEventDispatcher } from "svelte";
   const dispatcher = createEventDispatcher();
   export let wave_type = "modulus";
-  let quantum_numbers = { n: 3, l: 2, m: -1 };
-  let precision = 100;
+  export let quantum_numbers = { n: 3, l: 2, m: -1 };
+  export let precision = 100;
 </script>
 
 <h2>Quantum Parameters</h2>
@@ -19,8 +19,8 @@
 </table>
 
 <select name="wave_type" id="select_wave_type" bind:value={wave_type}>
-  <option value="modulus">modulus</option>
-  <option value="density">density</option>
+  <option value="modulus">modulus + colored phase</option>
+  <option value="density">density + colored phase</option>
 </select>
 
 <div>
@@ -43,4 +43,14 @@
       precision: precision,
     });
   }}>Apply</button
+>
+
+<button
+  on:click={() => {
+    dispatcher("update_quantum_numbers", {
+      qn: quantum_numbers,
+      wave_type: wave_type,
+      precision: precision,
+    });
+  }}>Update</button
 >

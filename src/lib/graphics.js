@@ -19,13 +19,13 @@ const animate = () => {
   renderer.render(scene, camera);
 };
 
-export const resize = (c) => { // c stands for container (the div in which the canvas sits)
-  let w = c.clientWidth - 3;
-  let h = c.clientHeight - 3;
+export function resize(c) {
+  let w = (c.clientWidth - 4);
+  let h = (c.clientHeight - 4);
   renderer.setSize(w, h)
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
-};
+}
 
 export const createScene = (el, wasm) => {
   bindings = wasm;
@@ -34,6 +34,8 @@ export const createScene = (el, wasm) => {
   controls = new OrbitControls(camera, renderer.domElement);
   animate();
 }
+
+// default behaviour
 
 export const initDefaultLayer = (mc, isovalue, camera_dist) => {
   scene.clear();
@@ -57,7 +59,30 @@ export const addLayer = (input) => {
   let geometry = getGeometry(input.iso_value, input.material_type);
   let mesh = new THREE.Mesh(geometry, material);
   layers.push(mesh);
-  console.log(layers)
+  scene.add(mesh);
+};
+
+// preset behaviour
+
+export const firstPresetLayer = (mc, isovalue, material_type, camera_dist) => {
+  scene.clear();
+  marching_cubes = mc;
+  let init_material_type = material_type;
+  let material = getMaterial(init_material_type);
+  let geometry = getGeometry(isovalue, init_material_type);
+  let mesh = new THREE.Mesh(geometry, material)
+  getLighting(mesh);
+  layers = [mesh];
+  scene.add(mesh);
+  camera.position.z = camera_dist;
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+}
+
+export const addPresetLayer = (isovalue, material_type) => {
+  let material = getMaterial(material_type);
+  let geometry = getGeometry(isovalue, material_type);
+  let mesh = new THREE.Mesh(geometry, material);
+  layers.push(mesh);
   scene.add(mesh);
 };
 
@@ -101,7 +126,6 @@ const getGeometry = (iso_value, material_type) => {
   const indices = Array.from(marching_cubes_res.indices);
   const normals = marching_cubes_res.normals;
   const colors = marching_cubes_res.colors;
-  console.log(colors);
   const geometry = new THREE.BufferGeometry();
   geometry.setIndex(indices);
   geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));

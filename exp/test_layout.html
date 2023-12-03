@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+    }
+
+    .column {
+      flex: 1;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .column:first-child {
+      flex-basis: 20%;
+    }
+
+    .column:nth-child(2),
+    .column:nth-child(3) {
+      flex-basis: 40%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="column" style="background-color: #f0f0f0;">
+      <!-- Content for the first column (20%) -->
+      Column 1
+    </div>
+    <div class="column" style="background-color: #e0e0e0;">
+      <!-- Content for the second column (40%) -->
+      Column 2
+    </div>
+    <div class="column" style="background-color: #d0d0d0;">
+      <!-- Content for the third column (40%) -->
+      Column 3
+    </div>
+  </div>
+</body>
+</html>
+
