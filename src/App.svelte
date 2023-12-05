@@ -180,8 +180,8 @@
       w: plots_container.clientWidth / width_factor,
       h: plots_container.clientHeight / 2,
     };
-    createPlot(plot_radial, radial_res, size);
-    createPlot(plot_angular, angular_res, size);
+    createPlot(plot_radial, radial_res, size, "r");
+    createPlot(plot_angular, angular_res, size, String.raw`$\theta$`);
   }
 </script>
 

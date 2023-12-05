@@ -19,8 +19,8 @@
 </table>
 
 <select name="wave_type" id="select_wave_type" bind:value={wave_type}>
-  <option value="modulus">modulus + colored phase</option>
-  <option value="density">density + colored phase</option>
+  <option value="modulus">modulus & colored phase</option>
+  <option value="density">density & colored phase</option>
 </select>
 
 <div>
